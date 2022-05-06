@@ -33,11 +33,10 @@ class SomeCog(commands.Cog, Detector):
         lang = Language.from_code(lang_code)
         if lang is None:
             return await ctx.reply("Bad language code!")
-        else:
-            self.preferences[ctx.channel.id] = lang
-            await ctx.reply(
-                f"I've set the language to `{lang.name.title()}` {lang.emoji}!"
-            )
+        self.preferences[ctx.channel.id] = lang
+        await ctx.reply(
+            f"I've set the language to `{lang.name.title()}` {lang.emoji}!"
+        )
 
     @commands.command(name="hi")
     async def greet(self, ctx):

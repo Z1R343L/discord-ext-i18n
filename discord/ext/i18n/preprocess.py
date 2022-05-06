@@ -31,9 +31,8 @@ class Detector:
         obj = super().__new__(cls)
         for item_name in dir(obj):
             item = getattr(obj, item_name, None)
-            if callable(item):
-                if hasattr(item, "__lang_getter__"):
-                    Detector.language_of = item  # type: ignore
+            if callable(item) and hasattr(item, "__lang_getter__"):
+                Detector.language_of = item  # type: ignore
         return obj
 
     async def first_language_of(
@@ -56,16 +55,15 @@ class Detector:
                 guild_id = ch.guild.id  # type: ignore
             except AttributeError:
                 guild_id = None
+        elif ctx._parent.message and ctx._parent.message.guild:
+            author_id = ctx._parent.message.author.id
+            channel_id = ctx._parent.message.channel.id
+            guild_id = ctx._parent.message.guild.id
         else:
-            if ctx._parent.message and ctx._parent.message.guild:
-                author_id = ctx._parent.message.author.id
-                channel_id = ctx._parent.message.channel.id
-                guild_id = ctx._parent.message.guild.id
-            else:
-                if ctx._parent.user:
-                    author_id = ctx._parent.user.id
-                channel_id = ctx._parent.channel_id
-                guild_id = ctx._parent.guild_id
+            if ctx._parent.user:
+                author_id = ctx._parent.user.id
+            channel_id = ctx._parent.channel_id
+            guild_id = ctx._parent.guild_id
 
         if author_id:
             dest_lang = await self.language_of(author_id)
@@ -180,8 +178,7 @@ class TranslationAgent:
         Tokenizes the source string into segments to translate individually
         for better accuracy.
         """
-        cached = self.trans_assemble(content, self.tokenize(content))
-        return cached
+        return self.trans_assemble(content, self.tokenize(content))
 
     @staticmethod
     def tokenize(string: str):
@@ -218,10 +215,7 @@ class TranslationAgent:
                 if a_end and z_end:
                     break
 
-            phrase = string[start:end]
-            # Sometimes the phrase becomes nothing because all there is was
-            # illegal punctuations
-            if phrase:
+            if phrase := string[start:end]:
                 tokens.append(
                     {"start_pos": start, "end_pos": end, "phrase": phrase}
                 )

@@ -34,10 +34,9 @@ InterfaceOverridable = Callable[
 
 
 async def try_defer(obj: Any):
-    if isinstance(obj, InteractionResponse):
-        if not obj.is_done():
-            await obj.defer()
-            return True
+    if isinstance(obj, InteractionResponse) and not obj.is_done():
+        await obj.defer()
+        return True
     return False
 
 
@@ -238,16 +237,11 @@ class Agent:
         discord API Endpoint.
         """
         agent = TranslationAgent(lang, translator=Agent.translator)
-        if Agent.translate_messages:
-            if content:
-                content = agent.translate(content)
+        if Agent.translate_messages and content:
+            content = agent.translate(content)
 
         if Agent.translate_embeds:
-            if "embeds" in payload and payload["embeds"]:
-                embeds = payload["embeds"]
-            else:
-                embeds = []
-
+            embeds = payload["embeds"] if "embeds" in payload and payload["embeds"] else []
             if "embed" in payload:
                 embeds.append(payload["embed"])
 
