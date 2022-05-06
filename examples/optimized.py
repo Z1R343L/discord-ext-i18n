@@ -26,11 +26,10 @@ async def set_lang(ctx, lang_code):
     lang = Language.from_code(lang_code)
     if lang is None:
         return await ctx.reply("Bad language code!")
-    else:
-        bot.preferences[ctx.channel.id] = lang
-        await ctx.reply(
-            f"I've set the language to `{lang.name.title()}` \u200b{lang.emoji}!"
-        )
+    bot.preferences[ctx.channel.id] = lang
+    await ctx.reply(
+        f"I've set the language to `{lang.name.title()}` \u200b{lang.emoji}!"
+    )
 
 
 @bot.command(name="rand")

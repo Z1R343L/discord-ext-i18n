@@ -39,10 +39,9 @@ async def set_lang(ctx, lang_code):
     lang = Language.from_code(lang_code)
     if lang is None:
         return await ctx.reply("Bad language code!")
-    else:
-        # Set a language preference to the current channel.
-        bot.preferences[ctx.channel.id] = lang
-        await ctx.reply(f"I've set the language to `{lang.name.title()}` {lang.emoji}!")
+    # Set a language preference to the current channel.
+    bot.preferences[ctx.channel.id] = lang
+    await ctx.reply(f"I've set the language to `{lang.name.title()}` {lang.emoji}!")
 
 
 @bot.command(name="set")
@@ -54,17 +53,17 @@ async def trans_setting(ctx, option, state):
     if state not in ("True", "False"):
         return await ctx.reply(f"\u200b`{state}`\u200b is not a valid state.")
 
-    state = False if state == "False" else True
-    if option == "messages":
-        Agent.translate_messages = state
+    state = state != "False"
+    if option == "buttons":
+        Agent.translate_buttons = state
     elif option == "embeds":
         Agent.translate_embeds = state
-    elif option == "buttons":
-        Agent.translate_buttons = state
-    elif option == "selects":
-        Agent.translate_selects = state
+    elif option == "messages":
+        Agent.translate_messages = state
     elif option == "modals":
         Agent.translate_modals = state
+    elif option == "selects":
+        Agent.translate_selects = state
 
 
 bot.run("TOKEN")

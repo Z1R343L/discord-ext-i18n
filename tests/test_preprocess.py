@@ -75,11 +75,8 @@ def test_translation_attempt():
 
 
 def generate_preferences(amount: int):
-    preferences = {}
     langs = list(Language._member_map_.values())
-    for _ in range(amount):
-        preferences[generate_long_num(12)] = choice(langs)
-    return preferences
+    return {generate_long_num(12): choice(langs) for _ in range(amount)}
 
 
 async def test_detection():

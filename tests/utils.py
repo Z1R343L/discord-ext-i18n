@@ -8,13 +8,11 @@ from discord.ext.i18n.cache import Cache
 
 
 def generate_string(min_slen: int, max_slen: int):
-    return "".join(choice(printable) for i in range(randint(min_slen, max_slen)))
+    return "".join(choice(printable) for _ in range(randint(min_slen, max_slen)))
 
 
 def generate_string_tuple(amount: int, min_slen: int, max_slen: int):
-    test_strings = []
-    for _ in range(amount):
-        test_strings.append(generate_string(min_slen, max_slen))
+    test_strings = [generate_string(min_slen, max_slen) for _ in range(amount)]
     return tuple(test_strings)
 
 

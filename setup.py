@@ -2,13 +2,13 @@ from setuptools import setup
 from re import search, MULTILINE
 
 pkg_name = "i18n"
-prj_path = "discord/ext/{}/".format(pkg_name)
-prj_name = "discord-ext-{}".format(pkg_name)
+prj_path = f"discord/ext/{pkg_name}/"
+prj_name = f"discord-ext-{pkg_name}"
 descriptors = ("./README.md",)
 long_description = ""
 version = ""
 
-with open("{}/__init__.py".format(prj_path)) as fp:
+with open(f"{prj_path}/__init__.py") as fp:
     version = search(
         r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', fp.read(), MULTILINE
     ).group(1)  # type: ignore
@@ -24,9 +24,9 @@ setup(
     author="Rickaym",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Rickaym/{}".format(prj_name),
+    url=f"https://github.com/Rickaym/{prj_name}",
     project_urls={
-        "Issue tracker": "https://github.com/Rickaym/{}/issues".format(prj_name),
+        "Issue tracker": f"https://github.com/Rickaym/{prj_name}/issues"
     },
     license="MIT",
     python_requires=">=3.7",
